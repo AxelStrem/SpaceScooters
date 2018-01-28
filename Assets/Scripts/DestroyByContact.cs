@@ -12,6 +12,8 @@ public class DestroyByContact : MonoBehaviour
 	private int collisions;
 	private int df;
 
+    private bool destroyed;
+
 	public void Start()
 	{
 		GameObject gco = GameObject.FindWithTag ("GameController");
@@ -27,12 +29,16 @@ public class DestroyByContact : MonoBehaviour
 		}
 
 		collisions = -df;
+        destroyed = false;
 	}
 
 	void OnTriggerEnter(Collider other)
 	{
 		if ((other.tag == "boundary")||(other.tag == "hazard"))
 			return;
+
+        if (destroyed)
+            return;
 
 		collisions++;
 
@@ -50,6 +56,7 @@ public class DestroyByContact : MonoBehaviour
 		if ((collisions < MaxCollisions)&&(other.tag != "Player"))
 			return;
 
+        destroyed = true;
 		Destroy (gameObject);
 
 		Instantiate (explosion, transform.position, transform.rotation);
